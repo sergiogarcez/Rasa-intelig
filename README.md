@@ -14,23 +14,16 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000] with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- First Step:
+    - You need install Next project with command: "npx create-next-app@latest ." to install the latest version from Next.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Second Step:
+    - You need install Radix UI, come with components for example: scroll-chat and dialog.
+    - The command is "npm install @radix-ui/react-dialog @radix-ui/react-scroll-area"
+    - uuid is necessary because user have a unique id.
+    - You need install rasa in other folder. "pip install rasa"
+    - After that, "rasa init" to init rasa and all files from rasa is ready.
+    - Rasa server starts after the command "rasa run --cors *". --cors allows both frontend on port 3000 and rasa on port 5005 to run simultaneously and allows communication with then.
+    -

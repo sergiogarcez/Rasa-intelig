@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -13,29 +11,45 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
 
 # typescript
+/front_next/*.tsbuildinfo
+/front_next/next-env.d.ts
+
+# dependências
+/front_next/node_modules
+/back_django/venv
+/rasa_chatbot/.rasa
+
+# next.js
+/front_next/.next
+/front_next/out
+
+# arquivos de build
+/back_django/staticfiles
+/back_django/media
+
+# logs
+/front_next/npm-debug.log*
+/front_next/yarn-debug.log*
+
+# ambientes
+/front_next/.env*
+/back_django/.env*
+/rasa_chatbot/.env*
+
+# miscelânea
+.DS_Store
+*.pem
 *.tsbuildinfo
-next-env.d.ts
+
+#Global env
+/env*
+
+#Modelo rasa
+/rasa_chatbot/models/
