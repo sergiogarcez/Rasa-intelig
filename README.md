@@ -26,4 +26,5 @@ Open [http://localhost:3000] with your browser to see the result.
     - You need install rasa in other folder. "pip install rasa"
     - After that, "rasa init" to init rasa and all files from rasa is ready.
     - Rasa server starts after the command "rasa run --cors *". --cors allows both frontend on port 3000 and rasa on port 5005 to run simultaneously and allows communication with then.
-    -
+    - After Rasa API and Front-end connected, go make a django API.
+    - Use the command "pip install django djangorestframework. The most used for make API Rest with django.
