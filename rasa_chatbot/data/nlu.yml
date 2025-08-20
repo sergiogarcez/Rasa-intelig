@@ -1,7 +1,7 @@
 version: "3.1"
 
 nlu:
-- intent: greet
+- intent: saudacao
   examples: |
     - hey
     - hello
@@ -17,7 +17,7 @@ nlu:
     - goodevening
     - good afternoon
 
-- intent: goodbye
+- intent: despedida
   examples: |
     - cu
     - good by

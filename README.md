@@ -28,3 +28,8 @@ Open [http://localhost:3000] with your browser to see the result.
     - Rasa server starts after the command "rasa run --cors *". --cors allows both frontend on port 3000 and rasa on port 5005 to run simultaneously and allows communication with then.
     - After Rasa API and Front-end connected, go make a django API.
     - Use the command "pip install django djangorestframework. The most used for make API Rest with django.
+    - In django, the normal is have a project and one or some apps.
+    - First create a django project with "django-admin startproject {name_project} ."
+    - After create a app with "python manage.py startapp {name_app}"
+    - After that ou need config django to support the new app and new project. Go to settings.py and add in installed apps only.
+    - 
