@@ -32,4 +32,11 @@ Open [http://localhost:3000] with your browser to see the result.
     - First create a django project with "django-admin startproject {name_project} ."
     - After create a app with "python manage.py startapp {name_app}"
     - After that ou need config django to support the new app and new project. Go to settings.py and add in installed apps only.
-    - 
+    - Need change views.py to support prompt, user_message, rasa_prompts and others.
+    - Install ollama and deepseek-coder with command "ollama run deepseek-coder:1.3b".
+    - That command install a version from deepseek with 1.3 billions parameters. I choose this model because is fastest model from deepseek and i dont think necessary choose another model with more parameters. Does not require high computational cost.
+    
+
+
+
+
