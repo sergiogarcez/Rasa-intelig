@@ -27,11 +27,6 @@ class ActionFallbackLlm(Action):
             # Verifica se a resposta foi bem-sucedida
             if response.status_code == 200:
                 django_response = response.json()
-                # A sua lógica do LLM no Django virá aqui para
-                # processar essa resposta e tomar uma decisão.
-                
-                # Por enquanto, apenas repasse a mensagem de sucesso
-                # que a sua API Django está retornando.
                 dispatcher.utter_message(text=django_response.get("message"))
             else:
                 dispatcher.utter_message(text=f"A API do Django retornou um erro: {response.status_code}")
