@@ -15,6 +15,15 @@ const ChatPage: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  //Sidebar constantes
+  const [activeItem, setActiveItem] = useState('new-chat');
+
+  const navItems = [
+    { name: 'Novo Chat', id: 'new-chat' },
+    { name: 'Histórico', id: 'history' },
+    { name: 'Configurações', id: 'settings' },
+  ];
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -35,7 +44,7 @@ const ChatPage: React.FC = () => {
       const rasaResponse = await sendRasaMessage(inputMessage);
 
       // Adiciona a resposta do Rasa à interface
-      if (rasaResponse && rasaResponse.length > 0) {
+      if (rasaResponse && rasaResponse.length > 0) { // Verificação para ver se o Rasa retornou algo
         rasaResponse.forEach((rasaMsg: any) => {
           const botMessage: Message = { text: rasaMsg.text, fromUser: false };
           setMessages((prevMessages) => [...prevMessages, botMessage]);
@@ -51,7 +60,7 @@ const ChatPage: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => { //Permissividade para o enter enviar a msg
     if (e.key === 'Enter') {
       handleSendMessage();
     }
@@ -59,34 +68,41 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-100 text-gray-800">
-      {/* 1. Navegação Lateral Esquerda */}
-      <aside className="w-64 bg-gray-800 text-white p-6 flex flex-col items-center">
-        <h1 className="text-xl font-bold mb-8">Navegação</h1>
-        <nav className="flex flex-col gap-4 w-full">
-          <a href="#" className="p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-center">
-            Novo Chat
-          </a>
-          <a href="#" className="p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-center">
-            Histórico
-          </a>
-          <a href="#" className="p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-center">
-            Configurações
-          </a>
+      {/* 1. Painel Lateral Esquerdo */}
+    <aside className="w-64 bg-gray-900 text-gray-100 p-6 flex flex-col justify-between">
+      <div>
+        <h1 className="text-2xl font-bold mb-8 text-center">DeepRasa</h1>
+        <nav className="flex flex-col gap-4">
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href="#"
+              onClick={() => setActiveItem(item.id)}
+              className={`p-3 rounded-lg text-lg font-medium transition-colors duration-200 text-center ${
+                activeItem === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700'
+              }`}
+            >
+              {item.name}
+            </a>
+          ))}
         </nav>
-      </aside>
+      </div>
+      <div className="mt-8 pt-4 border-t border-gray-700 text-center">
+        <a href="#" className="p-3 text-sm text-gray-400 hover:text-gray-200 transition-colors duration-200">
+          Version 1.0
+        </a>
+      </div>
+    </aside>
 
       {/* 2. Área Central do Chat (Conteúdo Principal) */}
       <main className="flex-1 flex flex-col bg-white rounded-lg shadow-lg m-6">
-        <div className="flex-1 flex flex-col overflow-y-auto p-6"> {/* CORRIGIDO */}
+        <div className="flex-1 flex flex-col overflow-y-auto p-6"> 
           <div className="flex flex-col gap-4">
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`p-4 rounded-xl max-w-[70%] break-words ${
-                  msg.fromUser
-                    ? 'self-end bg-blue-500 text-white'
-                    : 'self-start bg-gray-200 text-black'
-                }`}
+                  msg.fromUser ? 'self-end bg-blue-500 text-white' : 'self-start bg-gray-200 text-black'}`}
               >
                 {msg.text}
               </div>
@@ -122,17 +138,6 @@ const ChatPage: React.FC = () => {
           </button>
         </div>
       </main>
-
-      {/* 4. Painel Lateral Direito */}
-      <aside className="w-64 bg-white p-6 border-l-2 border-gray-200 flex flex-col items-center">
-        <h2 className="text-xl font-bold mb-4">Perfil</h2>
-        <img
-          alt="Lipson"
-          className="w-24 h-24 rounded-full mb-4 border-4 border-black-400"
-        />
-        <h3 className="text-lg font-semibold">User</h3>
-        <span className="text-sm text-gray-500">Offline</span>
-      </aside>
     </div>
   );
 };
