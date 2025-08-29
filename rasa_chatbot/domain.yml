@@ -10,6 +10,9 @@ responses:
   - text: "Olá! Como posso ajudar você?"
   utter_despedida:
   - text: "Tchau! Foi um prazer conversar com você."
+  utter_nlu_fallback:
+    actions:
+    - action_fallback_llm # Adicione esta linha
 
 actions:
   - action_fallback_llm # Adicione esta linha

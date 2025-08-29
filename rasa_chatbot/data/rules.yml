@@ -2,7 +2,12 @@ version: "3.1"
 
 rules:
 
-- rule: Diga adeus imediatamente
+- rule: Responder à saudação
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+
+- rule: Responder à despedida
   steps:
   - intent: despedida
   - action: utter_despedida

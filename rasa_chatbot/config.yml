@@ -8,7 +8,7 @@ assistant_id: 20250816-171301-chill-reflection
 
 # Configuration for Rasa NLU.
 # https://rasa.com/docs/rasa/nlu/components/
-language: pt-br
+language: pt
 
 pipeline: null
 # # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
@@ -37,6 +37,7 @@ policies:
 #Default policies.
   - name: MemoizationPolicy
   - name: RulePolicy
+  - name: TEDPolicy
   - name: UnexpecTEDIntentPolicy
     max_history: 5
     epochs: 100 
