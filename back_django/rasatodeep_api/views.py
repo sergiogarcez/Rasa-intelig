@@ -3,60 +3,81 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import logging
+logger = logging.getLogger(__name__)
 import requests
+from ollama import generate
 import json
+import re
 
 class LLMFallbackView(APIView):
     
+    def remove_thinking_tags(self, text):
+        # Remove tudo entre <think> e </think>
+        text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL)
+        # Remove outras variações
+        text = re.sub(r'<thinking>.*?</thinking>', '', text, flags=re.DOTALL)
+        text = re.sub(r'\*thinks.*?\*', '', text, flags=re.DOTALL)
+        return text.strip()
+
     def post(self, request):
-        user_message = request.data.get('user_message')
-        rasa_prompts = request.data.get('rasa_prompts')
-
-        # 1. Constrói o prompt para o DeepSeek
-        # Instrua o LLM a atuar como um classificador e a retornar um JSON
-        prompt = f"""
-        Você é um classificador de intenções. Sua tarefa é analisar a mensagem do usuário e
-        determinar qual das intenções a seguir é a mais adequada.
-        
-        **Instruções:**
-        - Retorne apenas a intenção mais provável com uma porcentagem de confiança.
-        - O formato de saída deve ser um objeto JSON.
-        
-        **Mensagem do usuário:** "{user_message}"
-        
-        **Lista de intenções (prompts):**
-        {rasa_prompts}
-
-        **Formato de saída JSON (apenas o JSON):**
-        {{ "intent": "nome_da_intenção", "confidence": porcentagem_da_confiança }}
-        """
-
-        # 2. Faz a requisição para o servidor Ollama
         try:
-            ollama_url = "http://localhost:11434/api/generate"
-            payload = {
-                "model": "deepseek-coder",  # Nome do modelo do Ollama
-                "prompt": prompt,
-                "stream": False,  # Desativa o streaming para obter a resposta completa
-                "options": {
-                    "temperature": 0.1 # Garante uma resposta mais determinística
-                }
-            }
-            
-            ollama_response = requests.post(ollama_url, json=payload)
-            ollama_response.raise_for_status() # Lança um erro se a resposta não for 200
-            
-            response_text = ollama_response.json()["response"]
-            
-            # Limpa o texto da resposta para garantir que é um JSON válido
-            llm_result = json.loads(response_text.strip().lstrip('`json').rstrip('`'))
+            user_message = request.data.get('user_message')
+            rasa_prompts = request.data.get('rasa_prompts')
 
-            return Response(llm_result, status=status.HTTP_200_OK)
+            prompt = f"""
+            Classifique a mensagem do usuário na intenção mais provável.
 
-        except requests.exceptions.RequestException as e:
+            **Mensagem do usuário:** {user_message}
+            **Intenções:** {rasa_prompts}
+
+            Retorne apenas o JSON: {{ "intent": "nome_da_intenção", "confidence": "porcentagem_da_confiança" }}
+            """
+
+            #Template para enviar ao Ollama via lib, retirei o endpoint
+            ollama_response = generate(
+                model="qwen3:4b", # Nome do modelo do Ollama
+                prompt=prompt,
+                stream=False, # Desativa o streaming para obter a resposta completa
+                options=  { "temperature": 0.01 }# Garante uma resposta mais determinística
+                )
+                # "model": "qwen3:4b",  # Nome do modelo do Ollama
+                # "options": {
+                #     "temperature": 0.01 # Garante uma resposta mais determinística
+                # },
+            
+            
+            response_text = ollama_response["response"]
+            
+            #Metodo para tentar filtrar somente o json
+            # json_begin = response_text.find('{')
+            # json_end = response_text.rfind('}') + 1
+            # if json_begin != -1 and json_end != 0:
+            #     json_string = response_text[json_begin:json_end]
+            #     llm_result = json.loads(json_string)
+            # else:
+            #     raise json.JSONDecodeError("JSON não encontrado na resposta.", response_text, 0)
+            clean_llm_result = self.remove_thinking_tags(response_text)
+            json_begin = clean_llm_result.find('{')
+            json_end = clean_llm_result.rfind('}') + 1
+            if json_begin != -1 and json_end > json_begin:
+                json_string_clean = clean_llm_result[json_begin:json_end]
+                llm_result = json.loads(json_string_clean)
+            else:
+                raise json.JSONDecodeError("JSON não encontrado na resposta.", response_text, 0)
+            return Response(llm_result, status=status.HTTP_200_OK) #Retorna para o Rasa o Json com a resposta
+
+        except requests.exceptions.RequestException as e: #Erro na request.
+            logger.error(f"Erro de comunicação com Ollama: {e}", exc_info=True)
             return Response({"error": f"Erro de comunicação com Ollama: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as j: #Erro atrelado ao json transmitido
+            # Captura erros se a resposta do Ollama não for um JSON válido
+            logger.error(f"Resposta do Ollama não é um JSON válido: {j}. Resposta bruta: {response_text}", exc_info=True)
             return Response({"error": "Resposta do Ollama não é um JSON válido."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e: #Qualquer outro erro.
+            logger.error(f"Erro inesperado: {e}")
+            return Response({"error": f"Erro inesperado: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
 # from rest_framework import status

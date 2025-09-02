@@ -25,12 +25,18 @@ SECRET_KEY = 'django-insecure-%_+i#^q%c5nzqzflr7b)bjrvs*k&6e0gk3qb5&i+d4z7k@m*fg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] #Definir o localhost como host identificado.
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5055",  # A porta do server actions Rasa
+    "http://localhost:5005",  # A porta do server Rasa
+    "http://localhost:3000",  # A porta do seu front Next.js
+]
 
+CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [ #Alguns vem como default, outros a cada instalação no projeto, tenho que adicionar. No caso ate apps Django.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,10 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rasatodeep_api',
+    'corsheaders',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [ #Um tipo de filtro que checa varias condições para assim redirecionar para view.py.
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

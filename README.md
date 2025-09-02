@@ -37,6 +37,7 @@ Open [http://localhost:3000] with your browser to see the result.
     - That command install a version from deepseek with 1.3 billions parameters. I choose this model because is fastest model from deepseek and i dont think necessary choose another model with more parameters. Does not require high computational cost.
     
     - IN CASE WITH PROBLEMS ABOUT SQLITE3. INSTALL IN SQLITE WEBSITE AND PUT SQLITE.DDL IN ANACONDA/DDL/
+    - IS NECESSARY INSTALL CORS SUPPORT TO DJANGO WITH COMMAND "pip install django-cors-headers".
 
 
 
