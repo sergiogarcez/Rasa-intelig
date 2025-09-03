@@ -36,7 +36,7 @@ class LLMFallbackView(APIView):
 
             #Template para enviar ao Ollama via lib, retirei o endpoint
             ollama_response = generate(
-                model="qwen3:4b", # Nome do modelo do Ollama
+                model="phi3", # Nome do modelo do Ollama
                 prompt=prompt,
                 stream=False, # Desativa o streaming para obter a resposta completa
                 options=  { "temperature": 0.01 }# Garante uma resposta mais determinística
@@ -58,11 +58,10 @@ class LLMFallbackView(APIView):
             # else:
             #     raise json.JSONDecodeError("JSON não encontrado na resposta.", response_text, 0)
             clean_llm_result = self.remove_thinking_tags(response_text)
-            json_begin = clean_llm_result.find('{')
-            json_end = clean_llm_result.rfind('}') + 1
-            if json_begin != -1 and json_end > json_begin:
-                json_string_clean = clean_llm_result[json_begin:json_end]
-                llm_result = json.loads(json_string_clean)
+            json_match = re.search(r'\{.*?\}', clean_llm_result, re.DOTALL) #Logica de regex para extrair somente o json
+            if json_match:
+                json_string = json_match.group(0) #O que consegue puxar o que cai no regex
+                llm_result = json.loads(json_string)
             else:
                 raise json.JSONDecodeError("JSON não encontrado na resposta.", response_text, 0)
             return Response(llm_result, status=status.HTTP_200_OK) #Retorna para o Rasa o Json com a resposta

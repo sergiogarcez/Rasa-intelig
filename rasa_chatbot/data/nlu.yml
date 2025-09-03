@@ -28,3 +28,9 @@ nlu:
     - pode repetir?
     - me ensina a fazer um bolo de cenoura
 
+- intent: coisas_trabalho
+  examples: |
+    - quero Fumisso
+    - quero Relatório
+
+

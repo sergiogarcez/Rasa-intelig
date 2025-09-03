@@ -38,6 +38,8 @@ Open [http://localhost:3000] with your browser to see the result.
     
     - IN CASE WITH PROBLEMS ABOUT SQLITE3. INSTALL IN SQLITE WEBSITE AND PUT SQLITE.DDL IN ANACONDA/DDL/
     - IS NECESSARY INSTALL CORS SUPPORT TO DJANGO WITH COMMAND "pip install django-cors-headers".
+    - To prevent ollama from running the LLM model via CPU, in my case, i needed to install ollama via ollama-for-amd, a community repository. The entire tutorial is at this link: https://www.youtube.com/watch?v=G-kpvlvKM1g
+
 
 
 
