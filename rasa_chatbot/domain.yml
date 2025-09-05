@@ -3,16 +3,16 @@ version: "3.1"
 intents:
   - saudacao
   - despedida
-  - nlu_fallback # Adicione esta linha
+  - pergunta_rasa
 
 responses:
   utter_saudacao:
   - text: "Olá! Como posso ajudar você?"
   utter_despedida:
   - text: "Tchau! Foi um prazer conversar com você."
-  utter_coisas_trabalho:
-  - text: "Ok! Estou providenciando para voce."
-
+  utter_pergunta_rasa:
+  - text: "Sou NLControl, bot inteligente desenvolvido de forma independente e unicamente para a publicação de um artigo cientifico. Funciono a todo momento e não tenho nenhuma representação. Mais alguma pergunta?"
+  
 actions:
   - action_fallback_llm # Adicione esta linha
 

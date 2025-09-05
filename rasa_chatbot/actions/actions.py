@@ -31,8 +31,9 @@ class ActionFallbackLlm(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         django_endpoint = "http://localhost:8000/api/llm_fallback/"
         user_message = tracker.latest_message.get("text")
-        # Em um projeto real, você teria que obter essa lista dinamicamente do seu domínio.
-        rasa_prompts = ["saudacao", "despedida"]
+        # Pega de forma dinamica os prompts do nlu.yml
+        rasa_prompts = domain.get("intents", [])
+
 
         try:
             # Envia a requisição POST para a sua API Django

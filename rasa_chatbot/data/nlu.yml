@@ -19,18 +19,27 @@ nlu:
     - até logo
     - tenho que ir
 
-- intent: nlu_fallback
+- intent: pergunta_rasa
   examples: |
-    - não entendi
-    - me ajude
-    - o que é isso
-    - não sei o que dizer
-    - pode repetir?
-    - me ensina a fazer um bolo de cenoura
+    - quem é você?
+    - você é um robô?
+    - qual o horário de funcionamento?
+    - qual o nome da sua empresa?
 
-- intent: coisas_trabalho
+- intent: out_of_scope
   examples: |
-    - quero Fumisso
-    - quero Relatório
+    - fazer uma pergunta
+    - qual a capital do brasil?
+    - qual o preço do petróleo?
+    - me conte uma piada
+    - quantos planetas existem no sistema solar?
+    - por que o céu é azul?
+    - me ajude a cozinhar
+    - quero comprar um carro novo
+    - faça um cálculo para mim
+    - como está o tempo hoje?
+    - não sei o que dizer
+
+
 
 

@@ -64,6 +64,7 @@ class LLMFallbackView(APIView):
                 llm_result = json.loads(json_string)
             else:
                 raise json.JSONDecodeError("JSON não encontrado na resposta.", response_text, 0)
+            
             return Response(llm_result, status=status.HTTP_200_OK) #Retorna para o Rasa o Json com a resposta
 
         except requests.exceptions.RequestException as e: #Erro na request.
